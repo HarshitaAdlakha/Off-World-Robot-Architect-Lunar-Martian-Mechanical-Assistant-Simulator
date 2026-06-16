@@ -1,0 +1,6 @@
+{
+  "name": "Off-World Robot Architect",
+  "description": "Design, evaluate, and simulate specialized mechanical assistants for lunar and Martian habitats under strict engineering constraints with NASA SME AI consultation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
