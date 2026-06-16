@@ -3,6 +3,7 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
+import { generateWorkingsDocx, generateOnboardingDocx } from "./src/utils/docxGenerator";
 
 dotenv.config();
 
@@ -28,6 +29,32 @@ async function startServer() {
   const PORT = 3000;
 
   app.use(express.json({ limit: "10mb" }));
+
+  // API Route: Download System Workings Word Document (.docx)
+  app.get("/api/download/workings", async (req, res) => {
+    try {
+      const buffer = await generateWorkingsDocx();
+      res.setHeader("Content-Disposition", "attachment; filename=SYSTEM_WORKINGS_AND_ARCHITECTURE.docx");
+      res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+      res.send(buffer);
+    } catch (error: any) {
+      console.error("Failed to generate workings docx:", error);
+      res.status(500).send("Error generating Word document");
+    }
+  });
+
+  // API Route: Download Onboarding Guide Word Document (.docx)
+  app.get("/api/download/onboarding", async (req, res) => {
+    try {
+      const buffer = await generateOnboardingDocx();
+      res.setHeader("Content-Disposition", "attachment; filename=USER_TRAINING_AND_ONBOARDING_GUIDE.docx");
+      res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+      res.send(buffer);
+    } catch (error: any) {
+      console.error("Failed to generate onboarding docx:", error);
+      res.status(500).send("Error generating Word document");
+    }
+  });
 
   // API Route: Evaluate Robot Design
   app.post("/api/eval-robot", async (req, res) => {
